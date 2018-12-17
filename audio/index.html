@@ -4,7 +4,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		<meta name="format-detection" content="telephone=no" />
-		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 		<title></title>
 		<link rel="stylesheet" type="text/css" href="js/reset.css"/>
@@ -17,7 +17,7 @@
 		<link rel="stylesheet" type="text/css" href="js/index.css"/>
 	</head>
 	<body>
-		<h3>Ğ¡¸ßÅóÓÑ</h3>
+		<h3>å°é«˜æœ‹å‹</h3>
 		<canvas id='canvas' width="200" height="50"></canvas>
 		
 		<audio src="a/1sa4.mp3" controls id="audioDemo" autoplay></audio>
@@ -35,27 +35,27 @@
 				var ctx = new AudioContext();
 				var analyser = ctx.createAnalyser();
 				var audioSrc = ctx.createMediaElementSource(audio);
-				// ÎÒÃÇ±ØĞë½«MediaElementSourceÓë·ÖÎöÆ÷Á¬½ÓÆğÀ´ 
+				// æˆ‘ä»¬å¿…é¡»å°†MediaElementSourceä¸åˆ†æå™¨è¿æ¥èµ·æ¥ 
 				audioSrc.connect(analyser);
 				analyser.connect(ctx.destination);
-				// ÎÒÃÇ¿ÉÒÔÅäÖÃ·ÖÎöÒÇ£ºÀıÈç analyser.fftSize£¨ÓĞ¹Ø¸ü¶àĞÅÏ¢£¬ÇëÔÄ¶Á¹æ·¶£©
+				// æˆ‘ä»¬å¯ä»¥é…ç½®åˆ†æä»ªï¼šä¾‹å¦‚ analyser.fftSizeï¼ˆæœ‰å…³æ›´å¤šä¿¡æ¯ï¼Œè¯·é˜…è¯»è§„èŒƒï¼‰
 				// analyser.fftSize = 64;
-				// frequencyBinCount ¸æËßÄú´Ó·ÖÎöÒÇ½ÓÊÕµÄÖµµÄÊıÁ¿
+				// frequencyBinCount å‘Šè¯‰æ‚¨ä»åˆ†æä»ªæ¥æ”¶çš„å€¼çš„æ•°é‡
 				var frequencyData = new Uint8Array(analyser.frequencyBinCount);
 					
-				// ÎÒÃÇÒÑ×¼±¸ºÃ½ÓÊÕÒ»Ğ©Êı¾İ£¡
+				// æˆ‘ä»¬å·²å‡†å¤‡å¥½æ¥æ”¶ä¸€äº›æ•°æ®ï¼
 				var canvas = document.getElementById('canvas'),
 					cwidth = canvas.width,
 					cheight = canvas.height - 2,
-					meterWidth = 1, //ÆµÆ×ÖĞµÄÃ×¿í
-					gap = 7, //ÆµÂÊ¸ß¶ÈÑÕÉ«µ÷½Ú
+					meterWidth = 1, //é¢‘è°±ä¸­çš„ç±³å®½
+					gap = 7, //é¢‘ç‡é«˜åº¦é¢œè‰²è°ƒèŠ‚
 					capHeight = 2,
 					capStyle = '#000',
-					spacing = 2,//¼ä¾à
-					//¼ÆÊı
+					spacing = 2,//é—´è·
+					//è®¡æ•°
 					meterNum = cwidth / (meterWidth + (spacing-2)), 
 					 
-					capYPositionArray = []; ////´æ´¢Ç°Ò»Ö¡µÄ´óĞ´×ÖÄ¸µÄ´¹Ö±Î»ÖÃ
+					capYPositionArray = []; ////å­˜å‚¨å‰ä¸€å¸§çš„å¤§å†™å­—æ¯çš„å‚ç›´ä½ç½®
 				ctx = canvas.getContext('2d'),
 				gradient = ctx.createLinearGradient(0, 0, 0, cheight+2);
 				gradient.addColorStop(1, '#00f7ff');
@@ -69,7 +69,7 @@
 					var array = new Uint8Array(analyser.frequencyBinCount);
 					analyser.getByteFrequencyData(array);
 //					console.log(array)
-					var step = Math.round(array.length * .68 / meterNum); //´Ó×ÜÊı×éÖĞ³éÈ¡ÓĞÏŞÊı¾İ
+					var step = Math.round(array.length * .68 / meterNum); //ä»æ€»æ•°ç»„ä¸­æŠ½å–æœ‰é™æ•°æ®
 					ctx.clearRect(0, 0, cwidth, cheight);
 					for(var i = 0; i < meterNum; i++) {
 						var value = array[i * step];
@@ -77,14 +77,14 @@
 							capYPositionArray.push(value);
 						};
 						ctx.fillStyle = capStyle;
-						//»æÖÆÃ±×Ó£¬¾ßÓĞ¹ı¶ÉĞ§¹û
+						//ç»˜åˆ¶å¸½å­ï¼Œå…·æœ‰è¿‡æ¸¡æ•ˆæœ
 						if(value < capYPositionArray[i]) {
 							ctx.fillRect(i * spacing, cheight - (--capYPositionArray[i]) / gap, meterWidth, capHeight);
 						} else {
 							ctx.fillRect(i * spacing, cheight - value / gap, meterWidth, capHeight);
 							capYPositionArray[i] = value;
 						};
-						ctx.fillStyle = gradient; //½«filllStyleÉèÖÃÎª½¥±äÒÔ»ñµÃ¸üºÃµÄÍâ¹Û
+						ctx.fillStyle = gradient; //å°†filllStyleè®¾ç½®ä¸ºæ¸å˜ä»¥è·å¾—æ›´å¥½çš„å¤–è§‚
 						ctx.fillRect(i * spacing /*meterWidth+gap*/ , cheight - value / gap + capHeight, meterWidth, cheight); //the meter
 					}
 					requestAnimationFrame(renderFrame);
