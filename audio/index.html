@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="format-detection" content="telephone=no" />
+		<meta http-equiv="Content-Type" content="text/html; charset=gbk" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="js/reset.css"/>
+		<script src="js/jquery-1.10.1.min.js"></script>
+		
+		<script type="text/javascript" language="javascript">
+			var devicewidth = Math.min(750,document.documentElement.clientWidth);
+			document.documentElement.style.fontSize = devicewidth/7.5+"px";
+		</script>
+		<link rel="stylesheet" type="text/css" href="js/index.css"/>
+	</head>
+	<body>
+		<h3>小高朋友</h3>
+		<canvas id='canvas' width="200" height="50"></canvas>
+		
+		<audio src="a/1sa4.mp3" controls id="audioDemo" autoplay></audio>
+		
+		<p>
+			<button id="prev">prev</button>
+			<button id="next">next</button>
+			<button id="stop">stop</button>
+			<button id="play">play</button>
+		</p>
+		<script type="text/javascript">
+			window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;
+			window.onload = function() {
+				var audio = document.getElementById('audioDemo');
+				var ctx = new AudioContext();
+				var analyser = ctx.createAnalyser();
+				var audioSrc = ctx.createMediaElementSource(audio);
+				// 我们必须将MediaElementSource与分析器连接起来 
+				audioSrc.connect(analyser);
+				analyser.connect(ctx.destination);
+				// 我们可以配置分析仪：例如 analyser.fftSize（有关更多信息，请阅读规范）
+				// analyser.fftSize = 64;
+				// frequencyBinCount 告诉您从分析仪接收的值的数量
+				var frequencyData = new Uint8Array(analyser.frequencyBinCount);
+					
+				// 我们已准备好接收一些数据！
+				var canvas = document.getElementById('canvas'),
+					cwidth = canvas.width,
+					cheight = canvas.height - 2,
+					meterWidth = 1, //频谱中的米宽
+					gap = 7, //频率高度颜色调节
+					capHeight = 2,
+					capStyle = '#000',
+					spacing = 2,//间距
+					//计数
+					meterNum = cwidth / (meterWidth + (spacing-2)), 
+					 
+					capYPositionArray = []; ////存储前一帧的大写字母的垂直位置
+				ctx = canvas.getContext('2d'),
+				gradient = ctx.createLinearGradient(0, 0, 0, cheight+2);
+				gradient.addColorStop(1, '#00f7ff');
+				gradient.addColorStop(0.9, '#18ff05');
+				gradient.addColorStop(0.7, '#c4ff00');
+				
+				gradient.addColorStop(0.5, '#ffff04');
+				gradient.addColorStop(0, '#ff0404');
+				// loop
+				function renderFrame() {
+					var array = new Uint8Array(analyser.frequencyBinCount);
+					analyser.getByteFrequencyData(array);
+//					console.log(array)
+					var step = Math.round(array.length * .68 / meterNum); //从总数组中抽取有限数据
+					ctx.clearRect(0, 0, cwidth, cheight);
+					for(var i = 0; i < meterNum; i++) {
+						var value = array[i * step];
+						if(capYPositionArray.length < Math.round(meterNum)) {
+							capYPositionArray.push(value);
+						};
+						ctx.fillStyle = capStyle;
+						//绘制帽子，具有过渡效果
+						if(value < capYPositionArray[i]) {
+							ctx.fillRect(i * spacing, cheight - (--capYPositionArray[i]) / gap, meterWidth, capHeight);
+						} else {
+							ctx.fillRect(i * spacing, cheight - value / gap, meterWidth, capHeight);
+							capYPositionArray[i] = value;
+						};
+						ctx.fillStyle = gradient; //将filllStyle设置为渐变以获得更好的外观
+						ctx.fillRect(i * spacing /*meterWidth+gap*/ , cheight - value / gap + capHeight, meterWidth, cheight); //the meter
+					}
+					requestAnimationFrame(renderFrame);
+				}
+				renderFrame();
+				audio.play();
+			};
+		</script>
+
+		<script type="text/javascript">
+			var str = ["1sa4","25sa","as","sjk","wfx12","whys","adgssj"];
+			var i = 0;
+			$("#next").click(function(){
+				i++;
+				if(i == str.length){
+					i=0;
+				}
+				$("#audioDemo").attr("src","a/"+str[i]+".mp3");
+			})
+			$("#prev").click(function(){
+				console.log(i)
+				i--;
+				if(i ==	-1){
+					i=str.length-1;
+				}
+				$("#audioDemo").attr("src","a/"+str[i]+".mp3");
+			})
+			$("#play").click(function(){
+				$("#audioDemo")[0].play();  
+				document.addEventListener("WeixinJSBridgeReady", function () { 
+				    document.getElementById('audioDemo').play();  
+				}, false);
+			})
+			$("#stop").click(function(){
+				$("#audioDemo")[0].pause() 
+				document.addEventListener("WeixinJSBridgeReady", function () { 
+				    document.getElementById('audioDemo').pause();  
+				}, false);
+			})
+			
+		</script>
+		
+	</body>
+
+</html>
