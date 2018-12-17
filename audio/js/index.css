@@ -3,9 +3,9 @@ body{background: #fff;width: 7.5rem;;margin: 0 auto;font-size: 0.24rem;min-heigh
 h3{margin-top: 1.5rem;font-size: .4rem;}
 canvas{margin: .5rem auto .8rem;display: block;}
 audio{display: none;}
-button{width: 1.5rem;height: .6rem;-webkit-border-radius: 5px;border-radius: 5px;font-size: .32rem;color: #fff;}
-#prev{background: linear-gradient(to right,  #bfff18 , #2fce03);}
-#next{background: linear-gradient(to right,  #00fffb , #4a4aff);}
-#stop{background: linear-gradient(to right, #d400ff , #8100ff);}
-#play{background: linear-gradient(to right, #ffdc00  , #ff0303);}
+button{width: 1.5rem;height: .6rem;font-size: .32rem;color: #fff;}
+#prev{background: linear-gradient(to right,  #bfff18 , #2fce03);-webkit-border-radius: 5px;border-radius: 5px;}
+#next{background: linear-gradient(to right,  #00fffb , #4a4aff);-webkit-border-radius: 5px;border-radius: 5px;}
+#stop{background: linear-gradient(to right, #d400ff , #8100ff);-webkit-border-radius: 5px;border-radius: 5px;}
+#play{background: linear-gradient(to right, #ffdc00  , #ff0303);-webkit-border-radius: 5px;border-radius: 5px;}
 
