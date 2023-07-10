@@ -43,13 +43,16 @@
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
 
         // 加载音频文件
-        const audioElement = new Audio('./1.mp3');
-        const audioSource = audioContext.createMediaElementSource(audioElement);
+        const audioElement = new Audio();
+        audioElement.src="./111.mp3"
+        window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext;
+        var context = new window.AudioContext();
+        const audioSource = context.createMediaElementSource(audioElement);
 
         // 创建Analyser节点来获取音频数据
-        const analyser = audioContext.createAnalyser();
+        const analyser = context.createAnalyser();
         audioSource.connect(analyser);
-        analyser.connect(audioContext.destination);
+        analyser.connect(context.destination);
 
         // 设置Analyser节点的参数
         analyser.fftSize = 256;
@@ -80,6 +83,7 @@
 
         // 开始播放音频并调用函数更新云雾效果
         function audioPlay(){
+            console.log(1);
             audioElement.play();
             updateClouds();
         }
