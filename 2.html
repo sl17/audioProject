@@ -13,6 +13,7 @@
 
 <body>
     <canvas id="canvas"></canvas>
+    <button onclick="audioPlay()">play</button>
     <script>
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -78,8 +79,10 @@
         }
 
         // 开始播放音频并调用函数更新云雾效果
-        audioElement.play();
-        updateClouds();
+        function audioPlay(){
+            audioElement.play();
+            updateClouds();
+        }
     </script>
 </body>
 
